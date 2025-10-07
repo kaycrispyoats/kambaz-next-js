@@ -7,6 +7,7 @@ export default function Lab1() {
         <h3>HTML Examples 
           Kaylla Roland
           Section 4
+          Github link: https://github.com/kaycrispyoats/kambaz-next-js.git
         </h3>
         <div id="wd-h-tag">
         <h4>Heading Tags</h4>

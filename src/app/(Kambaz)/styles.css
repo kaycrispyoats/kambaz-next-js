@@ -1,0 +1,113 @@
+body   {
+  margin: 0;
+  padding: 0;
+}
+
+body * {
+  font-family: Arial,
+  Helvetica, sans-serif;
+}
+
+@media (min-width: 768px) {
+  #wd-kambaz .wd-main-content-offset {
+    padding-left: 140px !important;
+  }
+}
+
+.list-group.wd > .list-group-item.active {
+  color: black;
+  background-color: white;
+  border-left: 3px solid black !important;
+}
+
+.btn-secondary {
+  --bs-btn-color: #000 !important;
+  --bs-btn-bg: #c7cdd1 !important;
+  --bs-btn-border-color: #c7cdd1 !important;
+  --bs-btn-hover-color: #fff !important;
+}
+.bg-secondary {
+  --bs-secondary-rgb: 199, 205, 209;
+}
+.list-group-item {
+  --bs-list-group-border-color: gray;
+}
+.wd-lesson {
+  border-left: 3px solid green !important;
+}
+
+/* styles.css (shared for account pages) */
+
+/* green left border on list items */
+.left-green-border {
+  border-left: 6px solid #2e9b4b; 
+}
+
+/* check-dot circle */
+.check-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  background: #e9f7ee;
+  color: #2e9b4b;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+/* drag handle */
+.drag-handle {
+  color: #bbb;
+  font-size: 0.9rem;
+  padding-top: 6px;
+  padding-left: 6px;
+}
+
+/* search bar */
+.search-assignment .input-group-text {
+  border-right: 0;
+  background: transparent;
+}
+.search-assignment .form-control {
+  border-left: 0;
+}
+
+
+@media (max-width: 767px) {
+  .search-assignment { max-width: 100%; width: 100%; }
+
+}
+
+/*Course navigation specific styles*/
+.wd-courses-navigation {
+min-width: 200px;
+ 
+background-color: white;
+}
+ 
+ 
+.wd-courses-navigation .wd-inactive-course-link {
+color: #a71d2a !important;
+font-weight: 500;
+ 
+}
+ 
+ 
+.wd-courses-navigation .wd-active-course-link {
+color: black !important;
+background-color: white ;
+font-weight: 700;
+border-left: 3px solid black !important;
+ 
+}
+ 
+ 
+.wd-courses-navigation .list-group-item {
+padding-top: 10px;
+padding-bottom: 10px;
+padding-left: 13px !important;
+transition: background-color 0.1s ease;
+}
+ 

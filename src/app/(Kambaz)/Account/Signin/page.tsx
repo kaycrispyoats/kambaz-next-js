@@ -1,14 +1,21 @@
 import Link from "next/link";
-export default function Signin() {
- return (
-   <div id="wd-signin-screen">
-      <h3>Sign in</h3>
-      <input className="wd-username" placeholder="username" /> <br />
-      <input className="wd-password" placeholder="password" type="password" /> <br />
-      <Link id="wd-signin-btn" href="/Dashboard"> Sign in </Link> <br />
-      <Link id="wd-signup-link" href="Signup"> Sign up </Link>
+import './styles.css';
 
-     
-   </div>
-   
-);}
+export default function Signin() {
+  return (
+    <div id="wd-signin-screen" className="signinContainer">
+      <h3 className="signinTitle">Sign in</h3>
+
+      <input placeholder="username" className="signinInput wd-username" />
+      <input placeholder="password" type="password" className="signinInput wd-password" />
+
+      <Link href="/Account/Profile" className="btn btn-primary btn-sm signinButton">
+        Sign in
+      </Link>
+
+      <Link href="/Account/Signup" className="signupLink">
+        Sign up
+      </Link>
+    </div>
+  );
+}

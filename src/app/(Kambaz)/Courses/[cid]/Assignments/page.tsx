@@ -1,59 +1,82 @@
-import Link from "next/link";
-
+import ControlButtons from "./ModuleControlButtons";
+import SearchBar from "./SearchBar";
+import { IoMdArrowDropdown } from "react-icons/io";
+import { SlNote } from "react-icons/sl";
+import { ListGroup, ListGroupItem } from "react-bootstrap";
+import { BsGripVertical, BsPencil, BsTrash } from "react-icons/bs";
+import { FaPlusCircle } from "react-icons/fa";
+import { IoEllipsisVertical } from "react-icons/io5";
+import "../../../styles.css";
+import GreenCheckmark from "../Modules/GreenCheckmark";
 export default function Assignments() {
   return (
-    <div id="wd-assignments">
-      <input
-        placeholder="Search for Assignments"
-        id="wd-search-assignment"
-      />
-      <button id="wd-add-assignment-group">+ Group</button>
-      <button id="wd-add-assignment">+ Assignment</button>
-
-      <h3 id="wd-assignments-title">
-        ASSIGNMENTS 40% of Total <button>+</button>
-      </h3>
-
-      <ul id="wd-assignment-list">
-        <li className="wd-assignment-list-item">
-          <Link
-            href="/Courses/1234/Assignments/123/AssignmentEdit"
-            className="wd-assignment-link"
-          >
-            A1 - ENV + HTML
-          </Link>
-          <br />
-          Multiple Modules | <b>Not available until</b> May 6 at 12:00am |
-          <br />
-          <b>Due</b> May 13 at 11:59pm | 100 pts
-        </li>
-
-        <li className="wd-assignment-list-item">
-          <Link
-            href="/Courses/1234/Assignments/123/AssignmentEdit"
-            className="wd-assignment-link"
-          >
-            A2 - CSS + BOOTSTRAP
-          </Link>
-          <br />
-          Multiple Modules | <b>Not available until</b> May 13 at 12:00am |
-          <br />
-          <b>Due</b> May 20 at 11:59pm | 100 pts
-        </li>
-
-        <li className="wd-assignment-list-item">
-          <Link
-            href="/Courses/1234/Assignments/123/AssignmentEdit"
-            className="wd-assignment-link"
-          >
-            A3 - JAVASCRIPT + REACT
-          </Link>
-          <br />
-          Multiple Modules | <b>Not available until</b> May 20 at 12:00am |
-          <br />
-          <b>Due</b> May 27 at 11:59pm | 100 pts
-        </li>
-      </ul>
+    <div>
+      <SearchBar />
+      <ControlButtons /><br /><br /><br />
+      <ListGroup className="rounded-0" id="wd-modules">
+        <ListGroupItem className="wd-module p-0 mb-1 fs-5 border-gray">
+          <div className="wd-title p-3 ps-2 bg-secondary">
+            <BsGripVertical className=" me-2 fs-3" /> <IoMdArrowDropdown className=" me-2 fs-3" />Assignments
+            <div className="float-end me-2 d-flex align-items-center gap-3">
+                  <button className="btn btn-secondary rounded-pill bg-light text-dark">40% Of Total</button>
+                  <FaPlusCircle className="text-dark fs-4" />
+                  <IoEllipsisVertical className="text-dark fs-4" />
+            </div>
+ 
+          </div>
+        </ListGroupItem>
+        <ListGroupItem className="d-flex justify-content-between align-items-center wd-assignment-list-item">
+          <div className="d-flex align-items-start flex-grow-1 wd-assignment-text">
+            <SlNote className="me-2 fs-4 text-secondary" />
+ 
+            <div className="wd-assignment-text">
+              <span className="fw-bold"><h5>A1</h5></span>{" "}
+              <small>
+                Multiple Modules | <b>Not Available until</b> May 6 at 12:00am | <b>Due</b> May 13 at 11:59pm | 100 pts
+              </small>
+            </div>
+          </div>
+ 
+            <div className="float end justify-content-center d-flex align-items-center gap-3">
+              <GreenCheckmark />
+              <IoEllipsisVertical className="text-dark fs-4" />
+            </div>
+        </ListGroupItem>
+        <ListGroupItem className="d-flex justify-content-between align-items-center wd-assignment-list-item">
+          <div className="d-flex align-items-start flex-grow-1 wd-assignment-text">
+            <SlNote className="me-2 fs-4 text-secondary" />
+ 
+            <div className="wd-assignment-text">
+              <span className="fw-bold"><h5>A2</h5></span>{" "}
+              <small>
+                Multiple Modules | <b>Not Available until</b> May 6 at 12:00am | <b>Due</b> May 13 at 11:59pm | 100 pts
+              </small>
+            </div>
+          </div>
+ 
+            <div className="float end justify-content-center d-flex align-items-center gap-3">
+              <GreenCheckmark />
+              <IoEllipsisVertical className="text-dark fs-4" />
+            </div>
+        </ListGroupItem>
+        <ListGroupItem className="d-flex justify-content-between align-items-center wd-assignment-list-item">
+          <div className="d-flex align-items-start flex-grow-1 wd-assignment-text">
+            <SlNote className="me-2 fs-4 text-secondary" />
+ 
+            <div className="wd-assignment-text">
+              <span className="fw-bold"><h5>A3</h5></span>{" "}
+              <small>
+                Multiple Modules | <b>Not Available until</b> May 6 at 12:00am | <b>Due</b> May 13 at 11:59pm | 100 pts
+              </small>
+            </div>
+          </div>
+ 
+            <div className="float end justify-content-center d-flex align-items-center gap-3">
+              <GreenCheckmark />
+              <IoEllipsisVertical className="text-dark fs-4" />
+            </div>
+        </ListGroupItem>
+      </ListGroup>
     </div>
   );
 }
