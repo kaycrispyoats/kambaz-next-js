@@ -8,6 +8,7 @@ import { FaPlusCircle } from "react-icons/fa";
 import { IoEllipsisVertical } from "react-icons/io5";
 import "../../../styles.css";
 import GreenCheckmark from "../Modules/GreenCheckmark";
+import Link from "next/link";
 export default function Assignments() {
   return (
     <div>
@@ -30,7 +31,12 @@ export default function Assignments() {
             <SlNote className="me-2 fs-4 text-secondary" />
  
             <div className="wd-assignment-text">
-              <span className="fw-bold"><h5>A1</h5></span>{" "}
+              <Link
+          href="/Courses/1234/Assignments/123"
+          className="d-block text-decoration-none fw-bold text-dark"
+          >
+          <h5 className="m-0">A1</h5>
+            </Link>{" "}
               <small>
                 Multiple Modules | <b>Not Available until</b> May 6 at 12:00am | <b>Due</b> May 13 at 11:59pm | 100 pts
               </small>
@@ -47,7 +53,12 @@ export default function Assignments() {
             <SlNote className="me-2 fs-4 text-secondary" />
  
             <div className="wd-assignment-text">
+              <Link
+          href="/Courses/1234/Assignments/123"
+          className="d-block text-decoration-none fw-bold text-dark"
+          >
               <span className="fw-bold"><h5>A2</h5></span>{" "}
+              </Link>{" "}
               <small>
                 Multiple Modules | <b>Not Available until</b> May 6 at 12:00am | <b>Due</b> May 13 at 11:59pm | 100 pts
               </small>
@@ -64,7 +75,13 @@ export default function Assignments() {
             <SlNote className="me-2 fs-4 text-secondary" />
  
             <div className="wd-assignment-text">
+              <Link
+          href="/Courses/1234/Assignments/123"
+          className="d-block text-decoration-none fw-bold text-dark"
+          >
+      
               <span className="fw-bold"><h5>A3</h5></span>{" "}
+               </Link>{" "}
               <small>
                 Multiple Modules | <b>Not Available until</b> May 6 at 12:00am | <b>Due</b> May 13 at 11:59pm | 100 pts
               </small>
