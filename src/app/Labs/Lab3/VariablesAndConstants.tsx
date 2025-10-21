@@ -1,6 +1,6 @@
 export default function VariablesAndConstants() {
- let functionScoped = 2; // per VS Code, use 'let' or 'const' instead of 'var'
- let blockScoped = 5;
+ const functionScoped = 2; // per VS Code, use 'let' or 'const' instead of 'var'
+ const blockScoped = 5;
  const constant1 = functionScoped - blockScoped;
  return(
    <div id="wd-variables-and-constants">

@@ -16,7 +16,7 @@ export default async function CoursesLayout(
       <h2 className="text-danger">
       <FaAlignJustify className="me-4 fs-4 mb-1" />{course?.name}
       <span className="ms-2">
-          <Breadcrumb course={course} hideCourseName={true} />
+          <Breadcrumb course={course} />
         </span>
       </h2>
       <hr />

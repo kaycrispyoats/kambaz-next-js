@@ -5,9 +5,27 @@ import * as db from "../../../../Database";
 import { Table } from "react-bootstrap";
 import { FaUserCircle } from "react-icons/fa";
 
+// Define the types for users and enrollments
+type User = {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  loginId: string;
+  section: string;
+  role: string;
+  lastActivity: string;
+  totalActivity: string;
+};
+
+type Enrollment = {
+  user: string;   // user _id
+  course: string; // course id
+};
+
 export default function PeopleTable() {
   const { cid } = useParams();
-  const { users, enrollments } = db;
+  const users: User[] = db.users || [];
+  const enrollments: Enrollment[] = db.enrollments || [];
 
   // Filter users enrolled in the current course
   const courseUsers = users.filter((usr) =>
@@ -30,10 +48,12 @@ export default function PeopleTable() {
         <tbody>
           {courseUsers.length === 0 ? (
             <tr>
-              <td colSpan={6} className="text-center">No users enrolled in this course.</td>
+              <td colSpan={6} className="text-center">
+                No users enrolled in this course.
+              </td>
             </tr>
           ) : (
-            courseUsers.map((user: any) => (
+            courseUsers.map((user) => (
               <tr key={user._id}>
                 <td className="wd-full-name text-nowrap">
                   <FaUserCircle className="me-2 fs-1 text-secondary" />
