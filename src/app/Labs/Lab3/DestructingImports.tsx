@@ -27,7 +27,7 @@ export default function DestructingImports() {
 <tr>
   <td>Math.multiply(3, 4) = {Math.multiply(3, 4)}</td>
   <td>Matematica.multiply(3, 4) = {""}
-     {Matematica.multiply(2, 3)}</td>
+     {Matematica.multiply(3, 4)}</td>
   <td>multiply(3, 4) = {multiply(3, 4)}</td>
 </tr>
 
