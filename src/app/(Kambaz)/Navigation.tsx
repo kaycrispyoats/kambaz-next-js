@@ -10,15 +10,14 @@ import { usePathname } from "next/navigation";
 export default function KambazNavigation() {
   const pathname = usePathname();
 // Determine if a link is active
-  const isActive = (href: string) => pathname?.startsWith(href);
+const links = [
+    { label: "Dashboard", path: "/Dashboard", icon: AiOutlineDashboard },
+    { label: "Courses",   path: "/Dashboard", icon: LiaBookSolid },
+    { label: "Calendar",  path: "/Calendar",  icon: IoCalendarOutline },
+    { label: "Inbox",     path: "/Inbox",     icon: FaInbox },
+    { label: "Labs",      path: "/Labs",             icon: LiaCogSolid },
+  ];
 
-  // Helper to get ListGroupItem classes
-  const getItemClasses = (href: string) =>
-    `border-0 text-center ${isActive(href) ? "bg-white" : "bg-black"}`;
-
-  // Helper to get Link classes
-  const getLinkClasses = (href: string) =>
-    `text-decoration-none ${isActive(href) ? "text-danger" : "text-white"}`;
   return (
     <ListGroup className="rounded-0 position-fixed bottom-0 top-0 d-none d-md-block bg-black z-2" style={{ width: 110 }}
     id="wd-kambaz-navigation">
@@ -26,58 +25,23 @@ export default function KambazNavigation() {
  target="_blank"href="https://www.northeastern.edu/" id="wd-neu-link">
   <img src="/images/NEU.svg" width="75px" alt="Northeastern University" />
   </ListGroupItem>
-  <ListGroupItem className={getItemClasses("/Account")}>
-<Link href="/Account" id="wd-account-link" className={getLinkClasses("/Account")}>
-         <FaRegCircleUser
-  className="fs-1"
-  style={{ color: isActive("/Account") ? "gray" : "white" }}
-/>
-<br />
-          Account 
-          </Link>
-          </ListGroupItem>
-      <ListGroupItem className={getItemClasses("/Dashboard")}>
-      <Link href="/Dashboard" id="wd-dashboard-link" className={getLinkClasses("/Dashboard")}>
-      <AiOutlineDashboard className="fs-1 text-danger" />
-         <br />
-          Dashboard
-          </Link>
-          </ListGroupItem>
-    <ListGroupItem
-  className="border-0 text-center"
-  style={{ backgroundColor: isActive("/Courses/Modules") ? "white" : "black" }}
->
-  <Link
-    href="/Courses/Modules"
-    id="wd-course-link"
-    className="text-decoration-none text-danger"
-  >
-    <LiaBookSolid className="fs-1 text-danger" />
-    <br />
-    Courses
-  </Link>
-</ListGroupItem>
-
-      <ListGroupItem className={getItemClasses("/Calendar")}>
-      <Link href="/Calendar" id="wd-calendar-link" className={getLinkClasses("/Calendar")}>
-      <IoCalendarOutline className="fs-1 text-danger" />
+  <ListGroupItem as={Link} href="/Account"
+        className={`text-center border-0 bg-black
+            ${pathname.includes("Account") ? "bg-white text-danger" : "bg-black text-white"}`}>
+        <FaRegCircleUser
+          className={`fs-1 ${pathname.includes("Account") ? "text-danger" : "text-white"}`} />
+        <br />
+        Account
+      </ListGroupItem>
+      {links.map((link) => (
+        <ListGroupItem key={link.path} as={Link} href={link.path}
+          className={`bg-black text-center border-0
+              ${pathname.includes(link.label) ? "text-danger bg-white" : "text-white bg-black"}`}>
+          {link.icon({ className: "fs-1 text-danger"})}
           <br />
-            Calendar 
-            </Link>
-            </ListGroupItem>
-      <ListGroupItem className={getItemClasses("/Inbox")}>
-      <Link href="/Inbox" id="wd-inbox-link" className={getLinkClasses("/Inbox")}>
-      <FaInbox className="fs-1 text-danger" />
-          <br />
-            Inbox 
-            </Link>
-            </ListGroupItem>
-      <ListGroupItem className={getItemClasses("/Labs")}>
-      <Link href="/Labs" id="wd-labs-link" className={getLinkClasses("/Labs")}>
-      <LiaCogSolid className="fs-1 text-danger" />
-          <br />
-            Labs 
-            </Link>
-            </ListGroupItem>
+          {link.label}
+        </ListGroupItem>
+      ))}
     </ListGroup>
-  );}
+  );
+} 

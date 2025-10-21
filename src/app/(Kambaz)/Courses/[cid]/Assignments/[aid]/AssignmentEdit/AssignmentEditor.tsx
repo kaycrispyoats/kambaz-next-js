@@ -1,13 +1,21 @@
-
- 
+"use client";
 import { Form, FormLabel, FormGroup, FormSelect, Row, Col, FormControl } from 'react-bootstrap';
- 
-import "./styles.css";
+import { assignments } from '../../../../../Database';
+
+import "../../../../styles.css";
+import { useParams } from 'next/navigation';
+import Link from 'next/link';
 export default function AssignmentPage() {
+  const { cid,aid } = useParams();
+ 
+  const assignment = assignments.find(a=> a._id===aid );
+  
   return (
     <div id="wd-assignments-editor">
       <FormLabel>Assignment Name</FormLabel>
-      <FormControl type="textarea" placeholder="A1" />
+      <FormControl type="textarea" 
+            defaultValue={assignment?.title}
+            placeholder="A1" />
       <br />
       <div
         className="form-control p-3"
@@ -37,10 +45,10 @@ export default function AssignmentPage() {
             <FormLabel>Points</FormLabel>
           </Col>
           <Col xs={12} md={8}>
-            <FormControl type="text" placeholder="100" />
+            <FormControl type="text" defaultValue={assignment?.points} />
           </Col>
         </Row>
- 
+
         {/* ASSIGNMENT GROUP */}
         <Row className="mb-3 align-items-center">
           <Col xs={12} md={4} className="text-md-end text-start">
@@ -55,7 +63,7 @@ export default function AssignmentPage() {
             </FormSelect>
           </Col>
         </Row>
- 
+
         {/* DISPLAY GRADE AS */}
         <Row className="mb-3 align-items-center">
           <Col xs={12} md={4} className="text-md-end text-start">
@@ -68,7 +76,7 @@ export default function AssignmentPage() {
             </FormSelect>
           </Col>
         </Row>
- 
+
         {/* SUBMISSION TYPE */}
         <Row className="mb-3 align-items-top">
           <Col xs={12} md={4} className="text-md-end text-start">
@@ -110,7 +118,7 @@ export default function AssignmentPage() {
               <span>Everyone</span>
               <button
                 className="btn btn-link p-0 text-secondary"
-                style={{
+                style={{ 
                   textDecoration: 'none',
                   fontSize: '1rem',
                   lineHeight: '1'
@@ -121,22 +129,22 @@ export default function AssignmentPage() {
               </button>
             </div>
           </div>
- 
+
           {/* Due Date */}
           <div className="mb-3">
             <FormLabel className="fw-semibold">Due</FormLabel>
-            <FormControl type="datetime-local" defaultValue="2024-05-13T23:59" />
+            <FormControl type="datetime-local" defaultValue={assignment?.dueDate} />
           </div>
- 
+
           {/* Available From and Until */}
           <Row className="g-3">
             <Col xs={12} md={6}>
               <FormLabel className="fw-semibold">Available From</FormLabel>
-              <FormControl type="date" defaultValue="2024-05-06" />
+              <FormControl type="date" defaultValue={assignment?.availableDate} />
             </Col>
             <Col xs={12} md={6}>
               <FormLabel className="fw-semibold">Until</FormLabel>
-              <FormControl type="date" defaultValue="2024-05-20" />
+              <FormControl type="date" defaultValue={assignment?.untilDate} />
             </Col>
           </Row>
           
@@ -144,10 +152,14 @@ export default function AssignmentPage() {
       </Col>
     </Row>
     
-        <div className="d-flex justify-content-end mt-3">
-          
-          <button className="btn btn-secondary me-2">Cancel</button>
+        <div className="d-flex justify-content-end mt-3" >
+          <Link href={`/Courses/${cid}/Assignments`}>
+
+          <button className="btn btn-secondary me-2" >Cancel</button>
+          </Link>
+          <Link href={`/Courses/${cid}/Assignments`}>
           <button className="btn btn-danger me-2">Save</button>
+          </Link>
         </div>
       </Form>
     </div>

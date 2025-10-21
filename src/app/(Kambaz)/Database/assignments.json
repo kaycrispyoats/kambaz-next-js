@@ -1,0 +1,70 @@
+[
+  {
+    "_id": "A101",
+    "title": "Propulsion Assignment",
+    "course": "RS101",
+    "details": "Multiple Modules | <b>Not Available until</b> May 6 at 12:00am | <b>Due</b> May 13 at 11:59pm | 100 pts",
+    "completed": false,
+    "href": "/Courses/RS101/Assignments/A101"
+  },
+  {
+    "_id": "A102",
+    "title": "Combustion Analysis",
+    "course": "RS101",
+    "details": "Multiple Modules | <b>Not Available until</b> May 6 at 12:00am | <b>Due</b> May 13 at 11:59pm | 100 pts",
+    "completed": true,
+    "href": "/Courses/RS101/Assignments/A102"
+  },
+  {
+    "_id": "A103",
+    "title": "Nozzle Design Project",
+    "course": "RS101",
+    "details": "Multiple Modules | <b>Not Available until</b> May 6 at 12:00am | <b>Due</b> May 13 at 11:59pm | 100 pts",
+    "completed": false,
+    "href": "/Courses/RS101/Assignments/A103"
+  },
+
+  {
+    "_id": "A201",
+    "title": "Aerodynamics Quiz",
+    "course": "RS102",
+    "details": "Multiple Modules | <b>Not Available until</b> Jun 1 at 12:00am | <b>Due</b> Jun 8 at 11:59pm | 50 pts",
+    "completed": false
+  },
+  {
+    "_id": "A202",
+    "title": "Flow Analysis",
+    "course": "RS102",
+    "details": "Multiple Modules | <b>Not Available until</b> Jun 1 at 12:00am | <b>Due</b> Jun 8 at 11:59pm | 100 pts",
+    "completed": false
+  },
+  {
+    "_id": "A203",
+    "title": "Heating Analysis",
+    "course": "RS102",
+    "details": "Multiple Modules | <b>Not Available until</b> Jun 1 at 12:00am | <b>Due</b> Jun 8 at 11:59pm | 100 pts",
+    "completed": true
+  },
+
+  {
+    "_id": "A301",
+    "title": "Structural Design Task",
+    "course": "RS103",
+    "details": "Multiple Modules | <b>Not Available until</b> Jul 1 at 12:00am | <b>Due</b> Jul 8 at 11:59pm | 150 pts",
+    "completed": false
+  },
+  {
+    "_id": "A302",
+    "title": "Orbital Calculations",
+    "course": "RS103",
+    "details": "Multiple Modules | <b>Not Available until</b> Jul 1 at 12:00am | <b>Due</b> Jul 8 at 11:59pm | 100 pts",
+    "completed": false
+  },
+  {
+    "_id": "A303",
+    "title": "Systems Engineering Exam",
+    "course": "RS103",
+    "details": "Multiple Modules | <b>Not Available until</b> Jul 1 at 12:00am | <b>Due</b> Jul 8 at 11:59pm | 200 pts",
+    "completed": true
+  }
+]
