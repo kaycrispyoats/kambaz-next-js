@@ -1,156 +1,104 @@
+"use client";
+import { useState, useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../../../../store";
+import { updateAssignment, Assignment } from "../../reducer";
+import { Form, FormLabel, FormControl, Row, Col, Button } from "react-bootstrap";
 
- 
-import { Form, FormLabel, FormGroup, FormSelect, Row, Col, FormControl } from 'react-bootstrap';
- 
-import "./styles.css";
-export default function AssignmentPage() {
+export default function AssignmentEditor() {
+  const { cid, aid } = useParams();
+  const router = useRouter();
+  const dispatch = useDispatch();
+
+  const assignment = useSelector((s: RootState) =>
+    s.assignmentsReducer.assignments.find((a) => a._id === aid)
+  ) as Assignment | undefined;
+
+  const [title, setTitle] = useState("");
+  const [details, setDetails] = useState("");
+  const [points, setPoints] = useState<number | "">("");
+  const [dueDate, setDueDate] = useState("");
+  const [availableFrom, setAvailableFrom] = useState("");
+  const [availableUntil, setAvailableUntil] = useState("");
+
+  useEffect(() => {
+    if (assignment) {
+      setTitle(assignment.title ?? "");
+      setDetails(assignment.details ?? "");
+      setPoints(assignment.points !== undefined ? Number(assignment.points) : "");
+      setDueDate(assignment.dueDate ?? "");
+      setAvailableFrom(assignment.availableFrom ?? "");
+      setAvailableUntil(assignment.availableUntil ?? "");
+    }
+  }, [assignment]);
+
+  const handleSave = () => {
+    if (!assignment) return;
+    dispatch(updateAssignment({
+      ...assignment,
+      title,
+      details,
+      points: points === "" ? undefined : Number(points),
+      dueDate,
+      availableFrom,
+      availableUntil,
+    }));
+    router.push(`/Courses/${cid}/Assignments`);
+  };
+
+  const handleCancel = () => {
+    router.push(`/Courses/${cid}/Assignments`);
+  };
+
+  if (!assignment) return <div>Assignment not found.</div>;
+
   return (
-    <div id="wd-assignments-editor">
-      <FormLabel>Assignment Name</FormLabel>
-      <FormControl type="textarea" placeholder="A1" />
-      <br />
-      <div
-        className="form-control p-3"
-        id="assignmentDescription"
-        contentEditable
-        suppressContentEditableWarning={true}
-      >
-        The assignment is <span className="text-danger">available online</span>.
-        <br /><br />
-        Submit a link to the landing page of your Web application running on Netlify.
-        <br /><br />
-        The landing page should include the following:
-        <ul>
-          <li>Your full name and section</li>
-          <li>Links to each of the lab assignments</li>
-          <li>Link to the Kanbas application</li>
-          <li>Links to all relevant source code repositories</li>
-        </ul>
-        The Kanbas application should include a link to navigate back to the landing page.
-      </div>
-      <br></br>
-      <div id="wd-assignments-editor" className="container p-4">
+    <div className="p-4">
+      <h3>Edit Assignment</h3>
       <Form>
-        {/* POINTS */}
-        <Row className="mb-3 align-items-center">
-          <Col xs={12} md={4} className="text-md-end text-start">
+        <FormLabel>Title</FormLabel>
+        <FormControl value={title} onChange={(e) => setTitle(e.target.value)} />
+
+        <FormLabel className="mt-3">Details</FormLabel>
+        <FormControl
+          as="textarea"
+          rows={5}
+          value={details}
+          onChange={(e) => setDetails(e.target.value)}
+        />
+
+        <Row className="mt-3">
+          <Col>
             <FormLabel>Points</FormLabel>
+            <FormControl
+              type="number"
+              value={points}
+              onChange={(e) => setPoints(Number(e.target.value))}
+            />
           </Col>
-          <Col xs={12} md={8}>
-            <FormControl type="text" placeholder="100" />
-          </Col>
-        </Row>
- 
-        {/* ASSIGNMENT GROUP */}
-        <Row className="mb-3 align-items-center">
-          <Col xs={12} md={4} className="text-md-end text-start">
-            <FormLabel>Assignment Group</FormLabel>
-          </Col>
-          <Col xs={12} md={8}>
-            <FormSelect>
-              <option value="0" defaultChecked>ASSIGNMENTS</option>
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
-            </FormSelect>
+          <Col>
+            <FormLabel>Due Date</FormLabel>
+            <FormControl type="datetime-local" value={dueDate} onChange={(e) => setDueDate(e.target.value)} />
           </Col>
         </Row>
- 
-        {/* DISPLAY GRADE AS */}
-        <Row className="mb-3 align-items-center">
-          <Col xs={12} md={4} className="text-md-end text-start">
-            <FormLabel>Display Grade as</FormLabel>
+
+        <Row className="mt-3">
+          <Col>
+            <FormLabel>Available From</FormLabel>
+            <FormControl type="date" value={availableFrom} onChange={(e) => setAvailableFrom(e.target.value)} />
           </Col>
-          <Col xs={12} md={8}>
-            <FormSelect>
-              <option value="percentage" defaultChecked>Percentage</option>
-              <option value="points">Points</option>
-            </FormSelect>
+          <Col>
+            <FormLabel>Available Until</FormLabel>
+            <FormControl type="date" value={availableUntil} onChange={(e) => setAvailableUntil(e.target.value)} />
           </Col>
         </Row>
- 
-        {/* SUBMISSION TYPE */}
-        <Row className="mb-3 align-items-top">
-          <Col xs={12} md={4} className="text-md-end text-start">
-            <FormLabel>Submission Type</FormLabel>
-          </Col>
-          <Col xs={12} md={8}>
-           <div className="container p-4 border rounded">
-            <FormSelect className="mb-3">
-              <option value="online" defaultChecked>Online</option>
-              <option value="paper">On Paper</option>
-            </FormSelect>
-            
-              <div className="fw-semibold mb-3">Online Entry Options</div>
-              <div className="d-flex flex-column gap-2">
-              
-              <Form.Check type="checkbox" id="wd-text-entry" label="Text Entry" />
-              <Form.Check type="checkbox" id="wd-website-url" label="Website URL" />
-              <Form.Check type="checkbox" id="wd-media-recordings" label="Media Recordings" />  
-              <Form.Check type="checkbox" id="wd-student-annotation" label="Student Annotation" />
-              <Form.Check type="checkbox" id="wd-file-upload" label="File Uploads" />
-              </div>
-            </div>
-          </Col>
-        </Row>
-        
-        {/*Assign*/}
-        
-        <Row className="mb-3 align-items-start">
-      <Col xs={12} md={4} className="text-md-end text-start">
-        <FormLabel>Assign</FormLabel>
-      </Col>
-      <Col xs={12} md={8}>
-        <div className="container p-4 border rounded">
-          <div className="fw-semibold mb-3">Assign to</div>
-          
-          {/* Everyone Tag */}
-          <div className="d-flex flex-wrap border rounded p-1 gap-2 mb-3">
-            <div className="d-inline-flex align-items-center gap-2 px-3 py-2 bg-light border rounded">
-              <span>Everyone</span>
-              <button
-                className="btn btn-link p-0 text-secondary"
-                style={{
-                  textDecoration: 'none',
-                  fontSize: '1rem',
-                  lineHeight: '1'
-                }}
-                aria-label="Remove Everyone"
-              >
-                ×
-              </button>
-            </div>
-          </div>
- 
-          {/* Due Date */}
-          <div className="mb-3">
-            <FormLabel className="fw-semibold">Due</FormLabel>
-            <FormControl type="datetime-local" defaultValue="2024-05-13T23:59" />
-          </div>
- 
-          {/* Available From and Until */}
-          <Row className="g-3">
-            <Col xs={12} md={6}>
-              <FormLabel className="fw-semibold">Available From</FormLabel>
-              <FormControl type="date" defaultValue="2024-05-06" />
-            </Col>
-            <Col xs={12} md={6}>
-              <FormLabel className="fw-semibold">Until</FormLabel>
-              <FormControl type="date" defaultValue="2024-05-20" />
-            </Col>
-          </Row>
-          
-        </div>
-      </Col>
-    </Row>
-    
-        <div className="d-flex justify-content-end mt-3">
-          
-          <button className="btn btn-secondary me-2">Cancel</button>
-          <button className="btn btn-danger me-2">Save</button>
+
+        <div className="mt-4 d-flex justify-content-end gap-2">
+          <Button variant="secondary" onClick={handleCancel}>Cancel</Button>
+          <Button variant="primary" onClick={handleSave}>Save</Button>
         </div>
       </Form>
-    </div>
     </div>
   );
 }
