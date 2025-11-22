@@ -31,5 +31,8 @@ export default function TOC() {
      <NavItem>
        <NavLink href="https://github.com/kaycrispyoats/kambaz-next-js.git">My GitHub</NavLink>
      </NavItem>
+     <NavItem>
+       <NavLink href="https://github.com/kaycrispyoats/kambaz-node-server-app.git">My server GitHub</NavLink>
+     </NavItem>
    </Nav>
 );}

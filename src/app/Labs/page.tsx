@@ -5,6 +5,7 @@ export default function Labs() {
      <h1>Labs
      </h1>
      Kaylla Roland Section 4
+     server link: https://kambaz-node-server-app-lnd6.onrender.com
      <ul>
        <li>
          <Link href="/Labs/Lab1" id="wd-lab1-link">
