@@ -1,12 +1,12 @@
 "use client";
-import { Form, FormLabel, Row, Col, FormControl, FormSelect, Button } from "react-bootstrap";
-import { useState } from "react";
+import { Form, FormLabel, Row, Col, FormControl, Button } from "react-bootstrap";
+import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../store";
-import { addAssignment, updateAssignment, Assignment } from "../../Assignments/reducer";
+import { setAssignments, addAssignment as addAssignmentAction, updateAssignment as updateAssignmentAction } from "../../Assignments/reducer";
+import * as client from "../../../client";
 
-// Form state: everything is string (for inputs), except optional _id
 type AssignmentFormState = {
   _id?: string;
   title: string;
@@ -21,68 +21,95 @@ type AssignmentFormState = {
 export default function AssignmentPage() {
   const { cid, aid } = useParams();
   const courseId = Array.isArray(cid) ? cid[0] : cid ?? "";
+  const assignmentId = aid;
   const router = useRouter();
   const dispatch = useDispatch();
   const { assignments } = useSelector((state: RootState) => state.assignmentsReducer);
-  const existing = assignments.find((a) => a._id === aid);
 
-  // Initialize form state
-  const [assignment, setAssignment] = useState<AssignmentFormState>(
-    existing
-      ? {
-          _id: existing._id,
-          title: existing.title ?? "",
-          description: existing.description ?? "",
-          points: existing.points?.toString() ?? "100",
-          dueDate: existing.dueDate ?? "",
-          availableDate: existing.availableDate ?? "",
-          untilDate: existing.untilDate ?? "",
-          course: existing.course,
-        }
-      : {
-          title: "",
-          description: "",
-          points: "100",
-          dueDate: "",
-          availableDate: "",
-          untilDate: "",
-          course: courseId,
-        }
-  );
+  // fetch existing from Redux (might be empty until we fetch)
+  const existing = assignments.find((a) => a._id === assignmentId);
 
-  const handleSave = (e: React.FormEvent) => {
-    e.preventDefault();
+  // local form state
+  const [assignment, setAssignment] = useState<AssignmentFormState>({
+    title: "",
+    description: "",
+    points: "100",
+    dueDate: "",
+    availableDate: "",
+    untilDate: "",
+    course: courseId,
+  });
 
-    // Convert points back to number for Redux
-    const payload: Assignment = {
-      _id: assignment._id ?? "", // new assignments will get _id in reducer
-      title: assignment.title,
-      description: assignment.description,
-      points: parseInt(assignment.points) || 0,
-      dueDate: assignment.dueDate,
-      availableDate: assignment.availableDate,
-      untilDate: assignment.untilDate,
-      course: assignment.course,
-      completed: existing?.completed ?? false,
-      details: ""
+  // fetch assignments for course when editing/new to make sure Redux has current data
+  useEffect(() => {
+    const fetch = async () => {
+      if (!courseId) return;
+      try {
+        const data = await client.findAssignmentsForCourse(courseId);
+        dispatch(setAssignments(data));
+      } catch (err) {
+        console.error("Failed to fetch assignments:", err);
+      }
     };
+    fetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [courseId]);
 
+  // when Redux assignments are loaded, populate the form for edit
+  useEffect(() => {
     if (existing) {
-      dispatch(updateAssignment(payload));
-    } else {
-      dispatch(addAssignment(payload));
+      setAssignment({
+        _id: existing._id,
+        title: existing.title ?? "",
+        description: existing.description ?? "",
+        points: existing.points?.toString() ?? "100",
+        dueDate: existing.dueDate ?? "",
+        availableDate: existing.availableDate ?? "",
+        untilDate: existing.untilDate ?? "",
+        course: existing.course,
+      });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [existing]);
 
-    router.push(`/Courses/${cid}/Assignments`);
+  const handleSave = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const payload = {
+        title: assignment.title,
+        description: assignment.description,
+        points: parseInt(assignment.points) || 0,
+        dueDate: assignment.dueDate,
+        availableDate: assignment.availableDate,
+        untilDate: assignment.untilDate,
+        course: courseId,
+      };
+
+      if (assignment._id) {
+        // update
+        const updated = await client.updateAssignment(assignment._id, payload);
+        dispatch(updateAssignmentAction(updated));
+      } else {
+        // create
+        const created = await client.createAssignmentForCourse(courseId, payload);
+        dispatch(addAssignmentAction(created));
+      }
+
+      // navigate back to assignments list
+      router.push(`/Courses/${courseId}/Assignments`);
+    } catch (err) {
+      console.error("Save failed:", err);
+      alert("Save failed — check console");
+    }
   };
 
   const handleCancel = () => {
-    router.push(`/Courses/${cid}/Assignments`);
+    router.push(`/Courses/${courseId}/Assignments`);
   };
 
   return (
     <div id="wd-assignments-editor">
-      <Form>
+      <Form onSubmit={handleSave}>
         <FormLabel>Assignment Name</FormLabel>
         <FormControl
           type="text"
@@ -115,7 +142,6 @@ export default function AssignmentPage() {
           </Col>
         </Row>
 
-        {/* Assign other fields as before */}
         <Row className="mb-3 align-items-center">
           <Col xs={12} md={4} className="text-md-end text-start">
             <FormLabel>Due Date</FormLabel>
@@ -149,12 +175,8 @@ export default function AssignmentPage() {
         </Row>
 
         <div className="d-flex justify-content-end mt-3">
-          <Button variant="danger" className="me-2" onClick={handleSave}>
-            Save
-          </Button>
-          <Button variant="secondary" onClick={handleCancel}>
-            Cancel
-          </Button>
+          <Button type="submit" variant="danger" className="me-2">Save</Button>
+          <Button variant="secondary" onClick={handleCancel}>Cancel</Button>
         </div>
       </Form>
     </div>

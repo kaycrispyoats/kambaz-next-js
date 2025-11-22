@@ -64,6 +64,10 @@ const assignmentsSlice = createSlice({
           : a
       );
     },
+    // add set assignments for storing data in server
+    setAssignments: (state, action: PayloadAction<Assignment[]>) => {
+  state.assignments = action.payload;
+},
  
     deleteAssignment: (state, action: PayloadAction<string>) => {
       state.assignments = state.assignments.filter(
@@ -72,7 +76,8 @@ const assignmentsSlice = createSlice({
     },
   },
 });
+
  
-export const { addAssignment, updateAssignment, deleteAssignment } =
+export const { addAssignment, updateAssignment, deleteAssignment, setAssignments } =
   assignmentsSlice.actions;
 export default assignmentsSlice.reducer;
