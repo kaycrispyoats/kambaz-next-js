@@ -35,9 +35,7 @@ export default function Dashboard() {
     enrollments.some(e => e.user === currentUser?._id && e.course === courseId);
 
   // Recalculate displayed courses on every render
-  const displayedCourses = showAll
-    ? courses
-    : courses.filter(c => isEnrolled(c._id));
+  const displayedCourses = courses;
 
   // Fetch all courses from server
   const fetchAllCourses = async () => {
@@ -51,31 +49,41 @@ export default function Dashboard() {
 
   // Fetch only courses current user is enrolled in
   const fetchMyCourses = async () => {
-    try {
-      const myCourses = await client.findMyCourses();
-      dispatch(setCourses(myCourses));
-    } catch (err) {
-      console.error("Failed to fetch my courses:", err);
-    }
-  };
+  try {
+    console.log(" Fetching MY courses...");
+    const myCourses = await client.findMyCourses();
+    console.log(" My courses received:", myCourses);
+    dispatch(setCourses(myCourses));
+  } catch (err) {
+    console.error("Failed to fetch my courses:", err);
+  }
+};
 
   // Enroll / unenroll current user in a course
   const handleEnrollToggle = async (courseId: string) => {
-    if (!currentUser) return;
-    try {
-      if (isEnrolled(courseId)) {
-        await client.unenrollUserFromCourse(courseId);
-      } else {
-        await client.enrollUserInCourse(courseId);
-      }
+  if (!currentUser) return;
 
-      // Fetch updated enrollments from server
-      const updatedEnrollments = await client.fetchEnrollmentsForCurrentUser();
-      dispatch(setEnrollments(updatedEnrollments));
-    } catch (err) {
-      console.error("Enroll toggle failed:", err);
+  try {
+  if (isEnrolled(courseId)) {
+    await client.unenrollUserFromCourse(courseId);
+  } else {
+    try {
+      await client.enrollUserInCourse(courseId);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      if (err.response?.status === 409) {
+        console.warn("Already enrolled - ignoring conflict");
+      } else {
+        throw err;
+      }
     }
-  };
+  }
+  const updated = await client.fetchEnrollmentsForCurrentUser();
+  dispatch(setEnrollments(updated));
+} catch (err) {
+  console.error("Enroll toggle failed:", err);
+}
+};
 
   const onAddNewCourse = async () => {
     if (!currentUser) return;
@@ -116,17 +124,19 @@ export default function Dashboard() {
 
   // Fetch current user's enrollments on mount
   useEffect(() => {
-    const fetchEnrollments = async () => {
-      if (!currentUser) return;
-      try {
-        const data = await client.fetchEnrollmentsForCurrentUser();
-        dispatch(setEnrollments(data));
-      } catch (err) {
-        console.error("Failed to fetch enrollments:", err);
-      }
-    };
-    fetchEnrollments();
-  }, [currentUser]);
+  const fetchEnrollments = async () => {
+    if (!currentUser) return;
+    try {
+      console.log(" Fetching enrollments for user:", currentUser._id);
+      const data = await client.fetchEnrollmentsForCurrentUser();
+      console.log(" Enrollments received:", data);
+      dispatch(setEnrollments(data));
+    } catch (err) {
+      console.error("Failed to fetch enrollments:", err);
+    }
+  };
+  fetchEnrollments();
+}, [currentUser]);
 
   if (!currentUser) return <div>Please log in to view courses</div>;
 

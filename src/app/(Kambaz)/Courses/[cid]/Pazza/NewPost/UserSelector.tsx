@@ -1,26 +1,29 @@
 'use client';
 import React from 'react';
-
+ 
 type UserSelectorProps = {
   allUsers: string[]; // first item expected to be "Instructors"
   selected: string[];
   onToggle: (user: string) => void;
 };
-
+ 
 export default function UserSelector({ allUsers, selected, onToggle }: UserSelectorProps) {
   return (
-    <div style={{ border: '1px solid #ddd', padding: 8, borderRadius: 4 }}>
-      <div style={{ fontSize: 13, marginBottom: 6 }}>Select users who can see this post</div>
+    <div className="border rounded p-2">
+      <div className="mb-2" style={{ fontSize: 13 }}>Select users who can see this post</div>
       {allUsers.map((u) => (
-        <label key={u} style={{ display: 'block', marginBottom: 6, cursor: 'pointer' }}>
+        <div key={u} className="form-check mb-2">
           <input
+            className="form-check-input"
             type="checkbox"
+            id={`user-${u}`}
             checked={selected.includes(u)}
             onChange={() => onToggle(u)}
-            style={{ marginRight: 8 }}
           />
-          {u}
-        </label>
+          <label className="form-check-label" htmlFor={`user-${u}`} style={{ cursor: 'pointer' }}>
+            {u}
+          </label>
+        </div>
       ))}
     </div>
   );

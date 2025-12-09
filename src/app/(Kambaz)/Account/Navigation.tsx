@@ -14,8 +14,12 @@ export default function AccountNavigation() {
         { href: "Signin", label: "Signin" },
         { href: "Signup", label: "Signup" },
       ];
+      if (currentUser?.role === "ADMIN") {
+    links.push({ href: "Users", label: "Users" });
+  }
 
   return (
+    
     <div id="wd-account-navigation" className="wd list-group fs-5 rounded-0">
       {links.map((link) => {
         const isActive = pathname.endsWith(link.href);

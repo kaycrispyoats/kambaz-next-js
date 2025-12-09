@@ -17,14 +17,20 @@ export default function Modules() {
   const [moduleName, setModuleName] = useState("");
   const { modules } = useSelector((state: RootState) => state.modulesReducer);
   const dispatch = useDispatch();
+  
   const onUpdateModule = async (module: any) => {
-    await client.updateModule(module);
+    if (!courseId) {
+      console.error("Invalid course ID");
+      return;
+    }
+    await client.updateModule(courseId, module);
     const newModules = modules.map((m: any) => m._id === module._id ? module : m );
     dispatch(setModules(newModules));
   };
 
   const onRemoveModule = async (moduleId: string) => {
-    await client.deleteModule(moduleId);
+    if (!courseId) return;
+    await client.deleteModule(courseId, moduleId);
     dispatch(setModules(modules.filter((m: any) => m._id !== moduleId)));
   };
 

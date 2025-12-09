@@ -55,6 +55,8 @@ export default function AssignmentPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [courseId]);
 
+  
+
   // when Redux assignments are loaded, populate the form for edit
   useEffect(() => {
     if (existing) {

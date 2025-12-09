@@ -1,38 +1,32 @@
 'use client';
 import React from 'react';
-
+ 
 type FolderSelectorProps = {
   folders: string[]; // available folders
   selected: string[]; // selected folder names
   onToggle: (folder: string) => void;
 };
-
+ 
 export default function FolderSelector({ folders, selected, onToggle }: FolderSelectorProps) {
   return (
     <div>
-      <div style={{ fontWeight: 600, marginBottom: 6 }}>Select Folders</div>
-      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+      <div className="fw-semibold mb-2">Select Folders</div>
+      <div className="d-flex gap-2 flex-wrap">
         {folders.map((f) => {
           const active = selected.includes(f);
           return (
             <label
               key={f}
-              style={{
-                border: '1px solid #ccc',
-                padding: '6px 10px',
-                borderRadius: 4,
-                cursor: 'pointer',
-                background: active ? '#eef' : '#fff',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 8,
-              }}
+              className={`border rounded px-2 py-1 cursor-pointer d-flex align-items-center gap-2 ${
+                active ? 'bg-primary bg-opacity-10 border-primary' : 'bg-white'
+              }`}
+              style={{ cursor: 'pointer' }}
             >
               <input
                 type="checkbox"
                 checked={active}
                 onChange={() => onToggle(f)}
-                style={{ margin: 0 }}
+                className="m-0 form-check-input"
               />
               <span>{f}</span>
             </label>
@@ -42,3 +36,4 @@ export default function FolderSelector({ folders, selected, onToggle }: FolderSe
     </div>
   );
 }
+ 

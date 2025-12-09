@@ -9,7 +9,7 @@ export default function CourseNavigation({ cid = "1234" }: { cid?: string }) {
   const LABELS = [
     "Home",
     "Modules",
-    "Piazza",
+    "Pazza",
     "Zoom",
     "Assignments",
     "Quizzes",
@@ -18,7 +18,7 @@ export default function CourseNavigation({ cid = "1234" }: { cid?: string }) {
   ];
 
   const links = LABELS.map((label) => {
-    if (label === "Piazza") return { href: "https://piazza.com/home", label };
+    //if (label === "Piazza") return { href: "https://piazza.com/home", label }; for project
     if (label === "Zoom") return { href: "https://www.zoom.com/", label };
     if (label === "People")
       return { href: `/Courses/${encodeURIComponent(cid)}/People/Table`, label };

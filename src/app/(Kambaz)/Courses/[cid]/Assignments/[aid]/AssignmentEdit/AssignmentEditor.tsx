@@ -1,19 +1,21 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../../../../store";
+import { useDispatch } from "react-redux";
 import { updateAssignment, Assignment } from "../../reducer";
+import * as client from "../../../../client"; // ADD THIS
 import { Form, FormLabel, FormControl, Row, Col, Button } from "react-bootstrap";
 
 export default function AssignmentEditor() {
   const { cid, aid } = useParams();
+  const assignmentId = Array.isArray(aid) ? aid[0] : aid;
+  const courseId = Array.isArray(cid) ? cid[0] : cid;
+  
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const assignment = useSelector((s: RootState) =>
-    s.assignmentsReducer.assignments.find((a) => a._id === aid)
-  ) as Assignment | undefined;
+  const [assignment, setAssignment] = useState<Assignment | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const [title, setTitle] = useState("");
   const [details, setDetails] = useState("");
@@ -22,40 +24,75 @@ export default function AssignmentEditor() {
   const [availableFrom, setAvailableFrom] = useState("");
   const [availableUntil, setAvailableUntil] = useState("");
 
+  // Fetch assignment from database
   useEffect(() => {
-    if (assignment) {
-      setTitle(assignment.title ?? "");
-      setDetails(assignment.details ?? "");
-      setPoints(assignment.points !== undefined ? Number(assignment.points) : "");
-      setDueDate(assignment.dueDate ?? "");
-      setAvailableFrom(assignment.availableFrom ?? "");
-      setAvailableUntil(assignment.availableUntil ?? "");
-    }
-  }, [assignment]);
+    const fetchAssignment = async () => {
+      console.log("🔍 aid param:", aid);
+      console.log("🔍 assignmentId:", assignmentId);
+      
+      if (!assignmentId) {
+        console.log("❌ No assignmentId!");
+        setLoading(false);
+        return;
+      }
+      
+      try {
+        console.log("📝 Fetching assignment:", assignmentId);
+        const data = await client.findAssignmentById(assignmentId);
+        console.log("📝 Assignment fetched:", data);
+        setAssignment(data);
+        
+        // Populate form
+        setTitle(data.title ?? "");
+        setDetails(data.details ?? "");
+        setPoints(data.points !== undefined ? Number(data.points) : "");
+        setDueDate(data.dueDate ?? "");
+        setAvailableFrom(data.availableFrom ?? "");
+        setAvailableUntil(data.availableUntil ?? "");
+      } catch (err) {
+        console.error("❌ Failed to fetch assignment:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const handleSave = () => {
-    if (!assignment) return;
-    dispatch(updateAssignment({
-      ...assignment,
-      title,
-      details,
-      points: points === "" ? undefined : Number(points),
-      dueDate,
-      availableFrom,
-      availableUntil,
-    }));
-    router.push(`/Courses/${cid}/Assignments`);
+    fetchAssignment();
+  }, [aid, assignmentId]);
+  
+
+  const handleSave = async () => {
+    if (!assignment || !assignmentId) return;
+    
+    try {
+      const updatedAssignment = {
+        ...assignment,
+        title,
+        details,
+        points: points === "" ? undefined : Number(points),
+        dueDate,
+        availableFrom,
+        availableUntil,
+      };
+      
+      await client.updateAssignment(assignmentId, updatedAssignment);
+      dispatch(updateAssignment(updatedAssignment));
+      
+      router.push(`/Courses/${courseId}/Assignments`);
+    } catch (err) {
+      console.error("Failed to update:", err);
+    }
   };
 
   const handleCancel = () => {
-    router.push(`/Courses/${cid}/Assignments`);
+    router.push(`/Courses/${courseId}/Assignments`);
   };
 
+  if (loading) return <div>Loading...</div>;
   if (!assignment) return <div>Assignment not found.</div>;
 
   return (
     <div className="p-4">
-      <h3>Edit Assignment</h3>
+      <h3>Edit Assignment: {title}</h3>
       <Form>
         <FormLabel>Title</FormLabel>
         <FormControl value={title} onChange={(e) => setTitle(e.target.value)} />
